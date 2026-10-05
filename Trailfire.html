@@ -1,0 +1,1381 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#100e0c" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Trailfire" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+  <link rel="icon" href="icon-192.png" />
+  <title>Trailfire</title>
+  <style>
+:root {
+  --bg: #100e0c;
+  --bg-2: #1a1512;
+  --bg-3: #241c17;
+  --ink: #f6efe6;
+  --muted: #b7a89a;
+  --dim: #8a7b6e;
+  --line: rgba(184, 115, 51, 0.28);
+  --copper: #c4844a;
+  --copper-2: #8d5a32;
+  --flame: #ff6a1a;
+  --flame-2: #ffb15a;
+  --good: #d7a15a;
+  --danger: #c45c3e;
+  --shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+  --radius: 18px;
+  --nav: 74px;
+  --safe-b: env(safe-area-inset-bottom, 0px);
+  --safe-t: env(safe-area-inset-top, 0px);
+  font-synthesis: none;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; background: var(--bg); color: var(--ink); }
+body {
+  font-family: "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  min-height: 100dvh;
+  background:
+    radial-gradient(1200px 500px at 80% -10%, rgba(255, 106, 26, 0.16), transparent 55%),
+    radial-gradient(800px 400px at -10% 20%, rgba(141, 90, 50, 0.25), transparent 50%),
+    var(--bg);
+}
+button, input, textarea, select { font: inherit; color: inherit; }
+button { cursor: pointer; }
+img, svg { display: block; }
+
+.app {
+  max-width: 520px;
+  margin: 0 auto;
+  min-height: 100dvh;
+  padding: calc(14px + var(--safe-t)) 16px calc(var(--nav) + var(--safe-b) + 18px);
+  position: relative;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.mark {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  background: linear-gradient(160deg, #3a271c, #1a120e);
+  border: 1px solid var(--line);
+  display: grid;
+  place-items: center;
+  box-shadow: inset 0 0 0 1px rgba(255, 177, 90, 0.08);
+}
+.brand h1 {
+  font-family: Georgia, "Iowan Old Style", Palatino, serif;
+  font-size: 28px;
+  letter-spacing: -0.03em;
+  margin: 0;
+  line-height: 1;
+}
+.brand p { margin: 3px 0 0; color: var(--muted); font-size: 13px; }
+
+.screen { display: none; animation: rise 0.28s ease; }
+.screen.on { display: block; }
+@keyframes rise {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+
+.row { display: flex; gap: 10px; }
+.grow { flex: 1; }
+
+.card {
+  background: linear-gradient(180deg, rgba(36, 28, 23, 0.96), rgba(20, 16, 13, 0.96));
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 14px;
+  box-shadow: var(--shadow);
+}
+.card + .card, .stack > * + * { margin-top: 12px; }
+
+.kicker {
+  color: var(--copper);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+h2, h3 { font-family: Georgia, Palatino, serif; margin: 4px 0 8px; letter-spacing: -0.02em; }
+h2 { font-size: 26px; }
+h3 { font-size: 18px; }
+.muted { color: var(--muted); }
+.dim { color: var(--dim); font-size: 13px; }
+
+.flame-hero {
+  display: grid;
+  grid-template-columns: 92px 1fr;
+  gap: 12px;
+  align-items: center;
+  background:
+    radial-gradient(120px 80px at 18% 60%, rgba(255, 106, 26, 0.22), transparent 70%),
+    linear-gradient(180deg, #2a1d16, #16110e);
+}
+.flame-wrap { width: 92px; height: 92px; }
+.stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 10px; }
+.stat {
+  background: rgba(0,0,0,0.22);
+  border-radius: 12px;
+  padding: 8px;
+  text-align: center;
+}
+.stat b { display: block; font-size: 18px; }
+.stat span { color: var(--dim); font-size: 11px; letter-spacing: 0.04em; }
+
+.chips { display: flex; gap: 8px; flex-wrap: wrap; }
+.chip, .seg button, .btn, .navbtn {
+  border: 1px solid var(--line);
+  background: #221912;
+  color: var(--ink);
+  border-radius: 999px;
+  padding: 10px 14px;
+  min-height: 44px;
+}
+.chip.on, .seg button.on {
+  background: linear-gradient(180deg, #ff8a3d, #d3541a);
+  color: #1a0d07;
+  border-color: transparent;
+  font-weight: 700;
+}
+.seg { display: flex; gap: 8px; }
+.seg button { flex: 1; border-radius: 14px; }
+
+.btn {
+  border-radius: 14px;
+  font-weight: 700;
+  width: 100%;
+}
+.btn.primary {
+  background: linear-gradient(180deg, #ff7a2f, #e25412);
+  color: #1b0c06;
+  border-color: transparent;
+  min-height: 52px;
+  font-size: 16px;
+}
+.btn.ghost { background: transparent; }
+.btn.small { width: auto; min-height: 40px; padding: 8px 12px; border-radius: 12px; }
+.btn:active { transform: translateY(1px); }
+
+.ex-card {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+  align-items: center;
+  text-align: left;
+  width: 100%;
+  background: #1c1612;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 12px;
+  min-height: 72px;
+}
+.ex-card b { display: block; font-size: 16px; }
+.badge {
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border-radius: 999px;
+  padding: 5px 8px;
+  border: 1px solid var(--line);
+  color: var(--flame-2);
+  white-space: nowrap;
+}
+.badge.bronze { color: #d08958; }
+.badge.silver { color: #d9d3cc; }
+.badge.gold { color: #f0c14b; }
+.badge.platin { color: #d7e7ff; }
+.badge.elite { color: #ffb15a; background: rgba(255,106,26,0.12); }
+
+.filters { display: flex; gap: 8px; overflow: auto; padding-bottom: 4px; margin: 8px -2px 12px; }
+.filters::-webkit-scrollbar { display: none; }
+
+.nav {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 0;
+  width: min(520px, 100%);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+  padding: 8px 10px calc(8px + var(--safe-b));
+  background: rgba(14, 11, 9, 0.92);
+  border-top: 1px solid var(--line);
+  backdrop-filter: blur(10px);
+  z-index: 20;
+}
+.navbtn {
+  background: transparent;
+  border: 0;
+  border-radius: 12px;
+  min-height: 54px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  color: var(--dim);
+  font-size: 11px;
+  font-weight: 700;
+}
+.navbtn.on { color: var(--flame-2); }
+
+.field { display: flex; flex-direction: column; gap: 6px; margin-top: 10px; }
+.field span { font-size: 12px; color: var(--muted); }
+input, textarea, select {
+  background: #120e0c;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 12px;
+  min-height: 46px;
+  width: 100%;
+}
+textarea { min-height: 88px; resize: vertical; }
+
+.week { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
+.day {
+  aspect-ratio: 0.78;
+  border-radius: 12px;
+  background: #171310;
+  border: 1px solid rgba(184,115,51,0.18);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  color: var(--dim);
+}
+.day.on { border-color: rgba(255,106,26,0.7); color: var(--flame-2); background: #2a160f; }
+.day.today { outline: 1px dashed var(--copper); }
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(8, 6, 5, 0.72);
+  z-index: 30;
+  display: none;
+  align-items: flex-end;
+  justify-content: center;
+}
+.overlay.on { display: flex; }
+.sheet {
+  width: min(520px, 100%);
+  max-height: min(92dvh, 860px);
+  overflow: auto;
+  background: #16110e;
+  border-radius: 22px 22px 0 0;
+  border: 1px solid var(--line);
+  padding: 16px 16px calc(18px + var(--safe-b));
+}
+.player {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  background: #0e0b09;
+  display: none;
+  flex-direction: column;
+}
+.player.on { display: flex; }
+.player-body {
+  flex: 1;
+  overflow: auto;
+  padding: calc(14px + var(--safe-t)) 16px 16px;
+  max-width: 520px;
+  width: 100%;
+  margin: 0 auto;
+}
+.timer {
+  font-variant-numeric: tabular-nums;
+  font-size: 54px;
+  font-family: Georgia, serif;
+  letter-spacing: -0.04em;
+  margin: 6px 0;
+}
+.steps { margin: 0; padding-left: 18px; }
+.steps li { margin: 6px 0; }
+.bars { display: grid; gap: 8px; }
+.barline { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 4px; }
+.track { height: 8px; background: #2a211c; border-radius: 99px; overflow: hidden; }
+.track i { display: block; height: 100%; background: linear-gradient(90deg, #c4844a, #ff6a1a); width: 0%; }
+
+.burst {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 50;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+.burst.on { display: flex; animation: fadeburst 1.3s ease forwards; }
+@keyframes fadeburst { 0% { opacity: 0; } 15% { opacity: 1; } 100% { opacity: 0; } }
+
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: calc(var(--nav) + 16px);
+  transform: translateX(-50%);
+  background: #2a1c14;
+  border: 1px solid var(--line);
+  color: var(--ink);
+  padding: 10px 14px;
+  border-radius: 12px;
+  z-index: 60;
+  display: none;
+  max-width: 90%;
+}
+.toast.on { display: block; }
+
+.chart { width: 100%; height: 120px; }
+.install-card { border-color: rgba(255, 106, 26, 0.45); }
+.install-card ol { margin: 8px 0 0; padding-left: 18px; }
+.install-card li { margin: 6px 0; }
+.side-tag {
+  display: inline-block;
+  background: rgba(255,106,26,0.12);
+  color: var(--flame-2);
+  border-radius: 8px;
+  padding: 2px 6px;
+  font-size: 12px;
+}
+
+</style>
+</head>
+<body>
+  <div class="app">
+    <main id="screen-today" class="screen on"></main>
+    <main id="screen-library" class="screen"></main>
+    <main id="screen-progress" class="screen"></main>
+    <main id="screen-horse" class="screen"></main>
+  </div>
+  <nav class="nav">
+    <button class="navbtn on" data-screen="today"><svg viewBox="0 0 24 24" width="22" height="22"><path fill="currentColor" d="M12 2c1 4 0 5-2 8 3-1 5 1 5 4 3-3 4-7 3-11 5 4 6 9 4 14-2 7-7 9-10 9S3 24 1 17C0 12 2 8 5 5c1 4 3 5 4 4-1-3 0-6 3-7z"/></svg>Heute</button>
+    <button class="navbtn" data-screen="library"><svg viewBox="0 0 24 24" width="22" height="22"><path fill="currentColor" d="M5 4h10a3 3 0 0 1 3 3v13H8a3 3 0 0 0-3 3V4zm3 4h7v2H8V8zm0 4h7v2H8v-2z"/></svg>Übungen</button>
+    <button class="navbtn" data-screen="progress"><svg viewBox="0 0 24 24" width="22" height="22"><path fill="currentColor" d="M4 18h3V10H4v8zm6 0h3V6h-3v12zm6 0h3V3h-3v15z"/></svg>Fortschritt</button>
+    <button class="navbtn" data-screen="horse"><svg viewBox="0 0 24 24" width="22" height="22"><path fill="currentColor" d="M5 9c0-3 3-5 6-4l2-2 2 1-1 3c2 1 3 3 3 5v2l-2 1-1-2-1 6h-3l-1-4-2 4H5l1-5c-1-1-1-3-1-5z"/></svg>Pferd</button>
+  </nav>
+  <div id="overlay" class="overlay" onclick="if (event.target.id==='overlay') closeSheet()">
+    <div class="sheet" id="sheet"></div>
+  </div>
+  <div id="player" class="player"><div class="player-body" id="player-body"></div></div>
+  <div id="burst" class="burst" aria-hidden="true">
+    <svg width="180" height="180" viewBox="0 0 64 64">
+      <path fill="#ff6a1a" d="M32 4c3 10 0 14-6 22 8-3 14 2 14 11 8-8 11-18 8-28 14 10 18 26 12 38-6 20-20 28-28 28S10 67 4 47C1 35 6 24 14 16c3 10 8 13 11 10-3-8-1-16 7-22z"/>
+      <path fill="#ffb15a" d="M32 26c5 7 2 12-2 16 5 0 10 5 7 12-5 5-12 5-15-2 0-7 5-10 5-15 2-5 2-9 5-11z"/>
+    </svg>
+  </div>
+  <div id="toast" class="toast"></div>
+  <script>
+const DISCIPLINES = [
+  { id: "hm", name: "Horsemanship", short: "Grundlagen", where: "sattel" },
+  { id: "re", name: "Reining", short: "Manöver", where: "sattel" },
+  { id: "tr", name: "Trail", short: "Hindernisse", where: "sattel" },
+  { id: "wp", name: "Western Pleasure", short: "Gang & Pattern", where: "sattel" },
+  { id: "rr", name: "Ranch Riding", short: "Ranch", where: "sattel" },
+  { id: "bw", name: "Bodenarbeit", short: "Boden", where: "boden" }
+];
+
+const EXERCISES = [
+  {
+    id: "hm-mount", d: "hm", name: "Korrektes Aufsteigen", min: 6, reps: "6 Aufstiege", where: "sattel", side: false,
+    goal: "Ruhig, gerade und ohne Ziehen am Sattelhorn aufsteigen.",
+    setup: "Pferd steht gerade, Zügel aufgenommen, Steigbügel passend. Sicherer Untergrund.",
+    steps: ["Pferd parallel und still stellen", "Linken Fuß in den Bügel, Gewicht in den Ballen", "Mit der Hand am Horn nur balancieren, nicht hochziehen", "Rechtes Bein ruhig überschwingen, weich in den Sitz kommen", "Sofort Zügel sortieren und einen Schritt vorwärts bitten"],
+    errors: ["Am Horn hochziehen", "Pferd tritt weg, weil der Reiter in den Rücken fällt", "Zügel verloren, Pferd dreht ein"],
+    up: "Aus dem Stand, dann nach einem Rückwärtstritt, dann von beiden Seiten, wenn das Pferd das kennt."
+  },
+  {
+    id: "hm-seat", d: "hm", name: "Sitz und Balance im Walk", min: 8, reps: "2 × 3 Min", where: "sattel", side: true,
+    goal: "Im Schritt unabhängig sitzen, Becken folgt, Beine ruhig.",
+    setup: "Sichere Bahn oder Roundpen, Zügel lang genug für leichten Kontakt.",
+    steps: ["Geradeaus im Walk, Blick auf", "Drei Atemzüge nur aufs Becken achten", "Arme seitlich, dann zurück an den Zügel", "Volte links und rechts ohne Tempo-Verlust", "Anhalten ohne nach vorn zu kippen"],
+    errors: ["Festhalten am Horn", "Bein klemmt bei jeder Wendung", "Oberkörper fällt in die Volte"],
+    up: "Ohne Bügel für kurze Stücke, nur wenn das Pferd sicher ist."
+  },
+  {
+    id: "hm-aids", d: "hm", name: "Unabhängige Hilfen", min: 8, reps: "5 Durchgänge", where: "sattel", side: true,
+    goal: "Bein, Sitz und Hand getrennt einsetzen.",
+    setup: "Gerade Linie und eine große Volte.",
+    steps: ["Walk, Hand still", "Nur Sitz: etwas mehr Tempo, dann zurück", "Nur Bein an der Longe-Seite leicht anlegen", "Hand bleibt tief und ruhig", "Wechsel: eine Hilfe, die anderen still"],
+    errors: ["Jede Hilfe kommt gleichzeitig", "Zügel wird kürzer, sobald das Bein arbeitet"],
+    up: "Im Jog dieselbe Trennung, kurze Sequenzen."
+  },
+  {
+    id: "hm-rein", d: "hm", name: "Zügelhaltung einhändig", min: 6, reps: "4 × 1 Min", where: "sattel", side: true,
+    goal: "Neck-rein leicht, Hand über dem Horn, nicht sägend.",
+    setup: "Split oder Romal, eine Hand. Freie Hand am Schenkel.",
+    steps: ["Zügel gleich lang aufnehmen", "Hand geschlossen, Daumen oben", "Geradeaus, Hand still", "Leichte Wendung nur aus der Hand, Sitz folgt", "Gerade richten, Zügel nachfassen"],
+    errors: ["Hand wandert zur Seite weg", "Zügel ungleich, Pferd über eine Schulter"],
+    up: "Slalom um Kegel mit nur einer Hand."
+  },
+  {
+    id: "hm-stop", d: "hm", name: "Stop aus dem Walk", min: 7, reps: "8 Stops", where: "sattel", side: false,
+    goal: "Pferd hält gerade, Reiter sitzt bis zum Schluss.",
+    setup: "Lange Gerade. Markierung als Haltepunkt.",
+    steps: ["Walk gleichmäßig zur Marke", "Sitz wird still, Bein hört auf zu treiben", "Zügel schließt weich, kein Ruck", "Pferd steht quadratisch", "Drei Sekunden stehen, dann lösen"],
+    errors: ["Nach vorn fallen", "Zügel zu lang, dann plötzlich kurz", "Pferd steht schief"],
+    up: "Aus dem Jog, immer noch weich, nicht sliden."
+  },
+  {
+    id: "hm-back", d: "hm", name: "Backup gerade", min: 6, reps: "6 × 6 Tritte", where: "sattel", side: false,
+    goal: "Gerade rückwärts, diagonal, ohne Eile.",
+    setup: "Entlang einer Bande oder zwischen zwei Linien.",
+    steps: ["Aus dem Halt Sitz leicht schließen", "Zügel pulsierend, nicht starr", "Erste zwei Tritte langsam", "Gerade halten, Schultern im Blick", "Vorwärts lösen und loben"],
+    errors: ["Dauerzug", "Pferd weicht mit der Hüfte", "Reiter lehnt zu weit zurück"],
+    up: "Leichte Biegung im Backup, dann wieder gerade."
+  },
+  {
+    id: "hm-side", d: "hm", name: "Seitwärts im Sattel", min: 7, reps: "6 Bahnen", where: "sattel", side: true,
+    goal: "Seitengang mit Vorder- und Hinterhand zusammen.",
+    setup: "Entlang der Bande, weg von der Bande seitwärts.",
+    steps: ["Walk, dann Halt parallel zur Bande", "Bein an der Seite, die weichen soll", "Sitz öffnet leicht zur Bewegungsrichtung", "Ein Schritt, nachgeben", "Gerade neu ausrichten"],
+    errors: ["Nur Vorhand schiebt", "Zügel blockiert die Schulter"],
+    up: "Über eine am Boden liegende Stange."
+  },
+  {
+    id: "hm-bend", d: "hm", name: "Biegung auf der Volte", min: 8, reps: "4 Volten je Seite", where: "sattel", side: true,
+    goal: "Gleichmäßige Biegung durch den Körper, nicht nur der Hals.",
+    setup: "12-m-Volte, Kegel als Mitte.",
+    steps: ["Walk auf der Volte", "Inneres Bein am Gurt, äußeres dahinter", "Innerer Zügel fragt, äußerer begrenzt", "Rippen folgen, nicht einrollen", "Geradeaus auf die Linie zurück"],
+    errors: ["Hals überbiegt, Schulter fällt raus", "Tempo bricht ein"],
+    up: "Volte verkleinern, dann im Jog."
+  },
+  {
+    id: "hm-trans", d: "hm", name: "Übergänge Walk–Jog–Walk", min: 8, reps: "10 Übergänge", where: "sattel", side: false,
+    goal: "Übergang aus dem Sitz, Pferd bleibt im Rahmen.",
+    setup: "Große Bahn, gleiche Strecke für jeden Übergang.",
+    steps: ["Walk taktrein", "Sitz etwas aktiver für Jog", "Jog 8 Tritte", "Sitz still, weiches Annehmen für Walk", "Sofort wieder Takt suchen"],
+    errors: ["Bein trommelt", "Übergang über die Hand erzwungen"],
+    up: "Jog–Lope nur, wenn das Pferd den Lope schon kennt und ruhig bleibt."
+  },
+  {
+    id: "re-circles", d: "re", name: "Circles klein und groß", min: 10, reps: "2 große, 2 kleine je Hand", where: "sattel", side: true,
+    goal: "Runder Circle, Tempo zur Größe passend, Lead klar.",
+    setup: "Abgesteckter Circle, etwa 18 m groß und 9 m klein. Sicheres Pferd im Lope.",
+    steps: ["Großer Circle im Lope, gleichmäßiger Takt", "Größe halten, nicht eiern", "Auf den kleinen Circle verkürzen, ohne zu hetzen", "Zurück auf groß, Tempo atmet mit", "In die Mitte führen und weich abwärts"],
+    errors: ["Circle wird zum Ei", "Innen schultert", "Tempo fällt auf dem kleinen Circle zusammen"],
+    up: "Geschwindigkeitswechsel innerhalb des großen Circles."
+  },
+  {
+    id: "re-lead", d: "re", name: "Einfache Lead Changes", min: 8, reps: "6 Changes", where: "sattel", side: true,
+    goal: "Lead über den Walk oder Jog wechseln, sauber und ruhig.",
+    setup: "Diagonale oder Acht. Nur reiten, was das Pferd schon gelernt hat.",
+    steps: ["Lope auf dem bekannten Lead", "Auf die Mittellinie, abwärts in den Jog", "Gerade richten, neuen Lead vorbereiten", "Neuer Lope auf dem anderen Fuß", "Circle zur Kontrolle"],
+    errors: ["Change im schiefen Pferd", "Zu frühes Bein, Crossfire"],
+    up: "Weniger Jog-Tritte zwischen den Leads, nie erzwingen."
+  },
+  {
+    id: "re-spin", d: "re", name: "Spins vorbereiten", min: 8, reps: "4 × 180° je Seite", where: "sattel", side: true,
+    goal: "Hinterhand als Achse andeuten, nicht hetzen.",
+    setup: "Ebener Boden, Pferd kennt Seitwärts. Erst 90 bis 180 Grad.",
+    steps: ["Aus dem Halt Außenbein leicht zurück", "Sitz öffnet in die Drehrichtung", "Vorderhand kreuzt, Hinterhand bleibt", "Nach einer Vierteldrehung lösen", "Geradeaus einen Schritt, dann neu"],
+    errors: ["Pferd tritt mit der Hinterhand weg", "Reiter zieht den Kopf herum", "Mehr Tempo statt mehr Kreuzung"],
+    up: "360 Grad nur bei gerader Achse."
+  },
+  {
+    id: "re-slide", d: "re", name: "Sliding-Stop-Vorbereitung", min: 8, reps: "6 Stopps", where: "sattel", side: false,
+    goal: "Tiefer, gerader Stop aus dem Lope, noch ohne Rutschpflicht.",
+    setup: "Guter Boden, nicht zu tief oder steinig. Pferd stoppt schon aus dem Jog.",
+    steps: ["Lope auf der Geraden, Reiter mittig", "Sitz tief und still in den letzten Tritten", "Stimme oder weiches Schließen, kein Ruck", "Pferd hält mit der Hinterhand unter dem Körper", "Stehen bleiben, nachgeben"],
+    errors: ["Nach vorn werfen", "Zügel hochreißen", "Stop in der Wendung"],
+    up: "Etwas mehr Tempo, nur wenn der Stop gerade bleibt."
+  },
+  {
+    id: "re-roll", d: "re", name: "Rollback-Form", min: 8, reps: "6 Rollbacks", where: "sattel", side: true,
+    goal: "Stop, 180 Grad über die Hinterhand, neuer Lead.",
+    setup: "Bande oder imaginäre Linie. Boden griffig.",
+    steps: ["Entlang der Linie im Lope", "Stop gerade", "Gewicht zur neuen Richtung", "Vorderhand dreht 180", "Sofort in den neuen Lope oder Jog"],
+    errors: ["Drehung nach vorn heraus", "Pause zu lang, Pferd schläft ein", "Schiefer Stop"],
+    up: "Flüssiger, ohne Extra-Schritt."
+  },
+  {
+    id: "re-run", d: "re", name: "Rundown-Gerade", min: 7, reps: "4 Geraden", where: "sattel", side: false,
+    goal: "Gerade beschleunigen und geführt bleiben.",
+    setup: "Lange, freie Gerade. Nur Tempo, das du halten kannst.",
+    steps: ["Aus dem Jog auf die Gerade", "Lope aufbauen, eine Linie", "Hände ruhig, Blick ans Ende", "Vor der Marke Tempo zurück", "Stop oder weicher Übergang"],
+    errors: ["Linie verlässt die Mitte", "Tempo ohne Rahmen", "Reiter kommt hinter die Bewegung"],
+    up: "Längere Gerade, gleicher Rahmen."
+  },
+  {
+    id: "tr-bridge", d: "tr", name: "Brücke", min: 7, reps: "6 Überquerungen", where: "sattel", side: false,
+    goal: "Gerade, im Walk, ohne Zögern mittig über die Brücke.",
+    setup: "Stabile Brücke, Anritt frei. Bodenarbeit zuerst, wenn unsicher.",
+    steps: ["Gerader Anritt im Walk", "Blick über die Brücke, nicht auf die Füße", "Mittig bleiben, Zügel lang genug", "Auf der Brücke nicht antreiben im Paniktempo", "Gerade herunter, zwei Schritte geradeaus"],
+    errors: ["Schiefer Anritt", "Reiter schaut runter und kippt", "Mitten drauf anhalten und festhalten"],
+    up: "Halt auf der Brücke, dann weiter. Jog nur bei sicherem Pferd."
+  },
+  {
+    id: "tr-gate", d: "tr", name: "Gate öffnen und schließen", min: 9, reps: "4 Tore je Seite", where: "sattel", side: true,
+    goal: "Tor kontrolliert, Pferd parallel, Riegel ohne Lostreten.",
+    setup: "Sicheres Tor, das zum Pferd passt. Eine Hand frei.",
+    steps: ["Parallel ans Tor, die richtige Seite", "Riegel öffnen, Tor einen Spalt", "Seitwärts oder Vorhand wenden, je nach Tor", "Durchgehen, ohne das Tor zu verlieren", "Schließen und Riegel zu, dann gerade weg"],
+    errors: ["Zügel verloren", "Pferd drängt durchs offene Tor", "Schulter fällt ins Tor"],
+    up: "Andere Hand, engeres Tor, aus dem Backup."
+  },
+  {
+    id: "tr-back", d: "tr", name: "Back-through", min: 8, reps: "5 Durchgänge", where: "sattel", side: true,
+    goal: "Rückwärts durch eine L- oder Gerade, Stangen nicht berühren.",
+    setup: "Stangen am Boden, zunächst weit. Helfer nicht nötig.",
+    steps: ["Gerade vor dem Eingang halten", "Backup einen Tritt, prüfen", "Schultern in die Lücke steuern", "Ecke früh andeuten", "Durch, dann vorwärts lösen"],
+    errors: ["Zu schnell", "Nur über den Zügel lenken", "Stange mit der Hinterhand"],
+    up: "Enger stellen, L-Form."
+  },
+  {
+    id: "tr-side", d: "tr", name: "Sidepass über die Stange", min: 7, reps: "6 Seiten", where: "sattel", side: true,
+    goal: "Seitwärts über eine Stange, Vorder- und Hinterhuf kreuzen sie.",
+    setup: "Eine Stange am Boden, parallel zum Pferd.",
+    steps: ["Parallel, Stange unter der Mitte", "Ein Seitwärtsschritt", "Beide Beinpaare über die Stange", "Nicht vorwärts ausweichen", "Andere Richtung"],
+    errors: ["Stange nur mit der Vorhand", "Eile, Huf schleift"],
+    up: "Erhöhte Stange nur minimal, oder zwischen zwei Stangen."
+  },
+  {
+    id: "tr-serp", d: "tr", name: "Serpentinen um Kegel", min: 7, reps: "4 Serpentinen", where: "sattel", side: true,
+    goal: "Gleichmäßige Bögen, gleicher Abstand, Walk-Takt.",
+    setup: "3 bis 5 Kegel in einer Linie.",
+    steps: ["Ersten Kegel links umrunden", "Wechsel der Biegung vor dem nächsten", "Abstand gleich halten", "Tempo nicht in der Biegung verlieren", "Letzten Kegel gerade verlassen"],
+    errors: ["Kegel schneiden", "Halsbiegung ohne Körper", "Jog, bevor der Walk stimmt"],
+    up: "Engere Abstände oder kurzer Jog zwischen den Kegeln."
+  },
+  {
+    id: "tr-mail", d: "tr", name: "Mailbox", min: 6, reps: "4 je Seite", where: "sattel", side: true,
+    goal: "Seitlich an die Box, Deckel oder Gegenstand ruhig nehmen und zurücklegen.",
+    setup: "Kiste auf Stangenhöhe. Gegenstand leicht.",
+    steps: ["Parallel, die arbeitende Seite zur Box", "Stehen, Zügel in einer Hand", "Gegenstand nehmen", "Einen Schritt weg oder bleiben", "Zurücklegen, dann aktiv weiter"],
+    errors: ["Pferd weicht, sobald die Hand hochgeht", "Reiter klappt zur Seite und verliert den Sitz"],
+    up: "Aus dem Walk anreiten und nach einem Tritt stehen."
+  },
+  {
+    id: "tr-stand", d: "tr", name: "Ruhiges Stehen", min: 6, reps: "4 × 20 Sek", where: "sattel", side: false,
+    goal: "Pferd steht, während der Reiter etwas tut.",
+    setup: "Offene Fläche, dann neben einem Gegenstand.",
+    steps: ["Weicher Halt", "Zügel lang, Sitz still", "Eine Hand bewegt sich langsam", "20 Sekunden ohne Nachtreten", "Ein Schritt vor, neu aufbauen"],
+    errors: ["Dauernd korrigieren", "Zügel fest, Pferd wird eng"],
+    up: "Mantel an- und ausziehen, Tür im Stand öffnen."
+  },
+  {
+    id: "wp-jog", d: "wp", name: "Gleichmäßiger Jog", min: 8, reps: "3 × 2 Min", where: "sattel", side: true,
+    goal: "Langer, gleicher Jog, Ecken gerundet, Headset ruhig.",
+    setup: "Bahn oder Viereck. Pleasure-Tempo, nicht Trail-Tempo.",
+    steps: ["Aus dem Walk in den Jog an der langen Seite", "Takt zählen", "Ecke als Viertelvolte", "Headset nicht festzurren", "Walk an einer festen Marke"],
+    errors: ["Jog wird zum Trab nach vorn", "Jede Ecke wird langsamer", "Hand spielt ständig"],
+    up: "Diagonale mit gleichem Takt."
+  },
+  {
+    id: "wp-lope", d: "wp", name: "Gleichmäßiger Lope", min: 8, reps: "3 Runden je Hand", where: "sattel", side: true,
+    goal: "Dreitakt bleibt, Pferd trägt sich, Reiter sitzt tief.",
+    setup: "Großer Zirkel. Nur wenn Lope schon sicher ist.",
+    steps: ["Übergang aus dem Jog an der langen Seite", "Lead prüfen", "Eine Runde gleicher Takt", "Ecken nicht schneiden", "Zurück in den Jog, bevor es auseinanderfällt"],
+    errors: ["Viertakt", "Innen durch die Schulter", "Reiter treibt in jedem Tritt nach"],
+    up: "Große Acht mit einfachem Leadwechsel."
+  },
+  {
+    id: "wp-trans", d: "wp", name: "Pleasure-Übergänge", min: 8, reps: "8 Übergänge", where: "sattel", side: false,
+    goal: "Walk, Jog, Lope ohne sichtbaren Kampf.",
+    setup: "Marken für Übergänge auf der Bahn.",
+    steps: ["Walk zur ersten Marke", "Jog, Rahmen behalten", "Lope kurz, wenn passend", "Abwärts erst Sitz, dann Hand", "Headset bleibt in jeder Gangart"],
+    errors: ["Kopf hoch im Abwärts", "Übergang zu spät an der Marke"],
+    up: "Pattern mit festen Punkten auswendig."
+  },
+  {
+    id: "wp-head", d: "wp", name: "Headset und Rahmen", min: 7, reps: "4 × 1 Min", where: "sattel", side: true,
+    goal: "Genick nachgeben, ohne den Rücken zu verlieren.",
+    setup: "Walk und Jog. Kein Tiefliegen erzwingen.",
+    steps: ["Takt zuerst", "Weiches Pulsieren, dann nachgeben", "Sobald das Genick kommt, Hand still", "Biegung prüfen: Rahmen bleibt in der Volte", "Lob im langen Zügel für ein paar Tritte"],
+    errors: ["Starrer Zug", "Hinter dem Zügel kriechen", "Nur der Hals rund, Rücken weg"],
+    up: "Gleicher Rahmen im Lope auf dem großen Circle."
+  },
+  {
+    id: "wp-pattern", d: "wp", name: "Horsemanship-Pattern sauber", min: 12, reps: "3 Muster", where: "sattel", side: true,
+    goal: "Ein kleines Muster mit Marken, Übergängen und Halt exakt reiten.",
+    setup: "Kegel: Start, Mitte, Stop-Punkt. Muster vorher am Boden abgehen.",
+    steps: ["Muster einmal im Walk abschreiten", "Jog auf der ersten Linie", "Stop an der Marke, 3 Sekunden", "Backup 4 Tritte", "360 Grad, dann Jog zur nächsten Marke"],
+    errors: ["Marke verpasst", "Tempo zwischen den Elementen unterschiedlich", "Schiefer Halt"],
+    up: "Muster mit Lope-Teilstück."
+  },
+  {
+    id: "rr-ext", d: "rr", name: "Verlängern und verkürzen", min: 8, reps: "6 Wechsel", where: "sattel", side: false,
+    goal: "Gangart bleibt, Raumgriff ändert sich.",
+    setup: "Lange Seite der Bahn oder Feldweg.",
+    steps: ["Mittleren Jog finden", "Sitz bittet um mehr Raumgriff", "6 Tritte verlängert", "Sitz sammelt, ohne zu ziehen", "Zurück zum Ausgangstakt"],
+    errors: ["Verlängern wird hetzen", "Verkürzen wird zum Halt", "Rahmen bricht"],
+    up: "Dasselbe im Lope auf sicherem Boden."
+  },
+  {
+    id: "rr-stop", d: "rr", name: "Ausbalancierte Ranch-Stopps", min: 7, reps: "8 Stopps", where: "sattel", side: false,
+    goal: "Stop aus Jog oder Lope, Pferd bleibt auf der Hinterhand verfügbar.",
+    setup: "Feld oder Bahn, Markierung.",
+    steps: ["Anritt gerade", "Vor der Marke Sitz tief", "Stop, alle vier Hufe unter dem Reiter", "Sofort Backup zwei Tritte oder weiter", "Kein Nachtreten"],
+    errors: ["Auf die Vorhand fallen", "Stop zu spät"],
+    up: "Stop und direkt in eine andere Richtung."
+  },
+  {
+    id: "rr-gate", d: "rr", name: "Rückwärts durchs Tor", min: 8, reps: "4 Tore", where: "sattel", side: true,
+    goal: "Tor rückwärts passieren, typisch Ranch, ohne Hektik.",
+    setup: "Weidetor oder aufgebautes Tor. Platz hinter dem Pferd frei.",
+    steps: ["Vor dem Tor halten", "Riegel, Tor einen Spalt", "Backup durch die Öffnung", "Tor mitnehmen", "Schließen, gerade weiter"],
+    errors: ["Vorwärts durchdrücken", "Tor schlägt ans Bein"],
+    up: "Engeres Tor, andere Seite."
+  },
+  {
+    id: "rr-terrain", d: "rr", name: "Gelände nutzen", min: 12, reps: "1 Runde", where: "sattel", side: true,
+    goal: "Hügel, Bodenwechsel oder Baumreihe als Trainingslinie.",
+    setup: "Bekannter Ausritt oder eingezäunte Fläche. Tempo dem Boden anpassen.",
+    steps: ["Walk bergauf, Reiter entlastet leicht nach vorn", "Gerade Linie zwischen zwei Punkten", "Jog nur auf gutem Boden", "Hang seitlich queren, bergauf-Bein bewusst", "Unten ankommen und stehen"],
+    errors: ["Tempo in den Abhang", "Zügel als Bremse am Hang", "Schwache Seite immer außen vergessen"],
+    up: "Kleine Rangieraufgabe an einem Baum wie an einem Tor."
+  },
+  {
+    id: "bw-join", d: "bw", name: "Join-up light", min: 8, reps: "3 Runden", where: "boden", side: false,
+    goal: "Pferd sucht die Nähe, ohne Jagd.",
+    setup: "Roundpen oder Longierzirkel. Seil oder Leadrope.",
+    steps: ["Pferd auf den Zirkel bitten", "Körper zeigt Druck, dann weg", "Sobald Ohr und Kopf kommen, Druck weg", "Einladen, nicht hinterherlaufen", "Stehen und Putzen als Lob"],
+    errors: ["Dauerdruck", "Pferd hetzt, Mensch dreht mit", "Join-up an der falschen Stelle belohnen"],
+    up: "Richtungswechsel über die Körpersprache."
+  },
+  {
+    id: "bw-lead", d: "bw", name: "Führen mit Raum", min: 7, reps: "4 Linien", where: "boden", side: true,
+    goal: "Pferd an der Schulter, hält an, wenn du hältst.",
+    setup: "Halfter und Führstrick, etwa eine Armlänge.",
+    steps: ["Neben der Schulter losgehen", "Blick dahin, wo ihr hinwollt", "Halt: eigener Stop, dann Strick kurz pulsieren falls nötig", "Zwei Sekunden stehen", "Wendung: Schulter weist den Weg"],
+    errors: ["Am Kopf zerren", "Pferd läuft voraus oder hinterher", "Mensch schaut das Pferd an statt den Weg"],
+    up: "Slalom und Halt auf einer Decke."
+  },
+  {
+    id: "bw-back", d: "bw", name: "Rückwärts am Boden", min: 6, reps: "6 × 5 Tritte", where: "boden", side: false,
+    goal: "Gerade rückwärts vom Wellen des Stricks, ohne Dauersog.",
+    setup: "Entlang einer Wand oder Linie.",
+    steps: ["Pferd gerade stellen", "Strick Richtung Brust pulsieren", "Erster Tritt, nachgeben", "Weitere Tritte rhythmisch", "Vorwärts bitten zum Lösen"],
+    errors: ["Strick dauerhaft eng", "Mensch geht rückwärts in das Pferd", "Hüfte bricht aus"],
+    up: "Leichte Ecke im Backup."
+  },
+  {
+    id: "bw-side", d: "bw", name: "Seitwärts am Boden", min: 7, reps: "6 Bahnen", where: "boden", side: true,
+    goal: "Seitengang von der Schulter oder vom Strick, Hufe kreuzen.",
+    setup: "Entlang einer Stange oder Bande.",
+    steps: ["Parallel aufstellen", "Druck an der Schulter zur Seite", "Ein Schritt, Pause", "Hinterhand mitnehmen, nicht nur vorne", "Andere Seite genauso lange"],
+    errors: ["Nur Vorhand", "Mensch steht im Weg der Hinterhand"],
+    up: "Über eine Bodenstange."
+  },
+  {
+    id: "bw-desen", d: "bw", name: "Desensibilisierung", min: 8, reps: "4 Reize", where: "boden", side: true,
+    goal: "Plane, Geräusch oder ungewohnter Gegenstand wird langweilig.",
+    setup: "Bekannte Plane oder Jacke. Abstand, den das Pferd aushält.",
+    steps: ["Gegenstand zeigen, Druck unter der Reaktionsschwelle", "Ruhiges Ohr abwarten", "Druck wegnehmen im richtigen Moment", "Näher, dieselbe Logik", "Andere Seite"],
+    errors: ["Reiz bis zur Flucht steigern", "Wegnehmen, während das Pferd noch zappelt", "Nur die gute Seite trainieren"],
+    up: "Gegenstand im Sattel, nur nach sicherer Bodenarbeit."
+  },
+  {
+    id: "bw-lunge", d: "bw", name: "Longieren im Roundpen", min: 10, reps: "2 × 4 Min je Hand", where: "boden", side: true,
+    goal: "Walk, Jog, Halt auf Stimme und Körpersprache.",
+    setup: "Roundpen oder Zirkel, sicheres Equipment.",
+    steps: ["Walk anbitten, Position halten", "Jog über Stimme und Energie", "Eine Runde gleicher Takt", "Abwärts, innen einladen", "Halt und zur Mitte kommen"],
+    errors: ["Mitlaufen", "Seil als Peitsche", "Nur eine Hand longieren"],
+    up: "Übergang an einer festen Stelle im Pen."
+  }
+];
+
+const FLAME_TIERS = [
+  { min: 60, name: "Präriebrand", line: "Die Ebene brennt. Du reitest, auch wenn der Wind dreht." },
+  { min: 30, name: "Lauffeuer", line: "Das Feuer läuft mit dir über die Bahn." },
+  { min: 14, name: "Lagerfeuer", line: "Warmes, stetiges Feuer. Daraus wird Ritt." },
+  { min: 7, name: "Flamme", line: "Eine richtige Flamme. Die Woche gehört dir." },
+  { min: 3, name: "Glut", line: "Glut hält. Ein Ritt und sie lebt." },
+  { min: 1, name: "Funke", line: "Ein Funke. Der nächste Ritt macht Glut." },
+  { min: 0, name: "Asche", line: "Kalt. Ein Workout zündet den Tag." }
+];
+
+const RANKS = [
+  { id: "none", label: "Neu", min: 0 },
+  { id: "bronze", label: "Bronze", min: 3 },
+  { id: "silver", label: "Silber", min: 8 },
+  { id: "gold", label: "Gold", min: 15 },
+  { id: "platin", label: "Platin", min: 28 },
+  { id: "elite", label: "Elite", min: 45 }
+];
+
+const STORAGE_KEY = "trailfire-v1";
+
+const defaultState = () => ({
+  horse: {
+    name: "Dusty",
+    age: 9,
+    level: "Fortgeschrittene Grundlagen",
+    notes: "Mag klare Übergänge. Am Tor links ungeduldig. Stangen ok, Plane noch mit Abstand.",
+    weak: "links"
+  },
+  xp: 420,
+  sessionMin: 35,
+  discipline: "hm",
+  logs: [],
+  completions: {},
+  days: {},
+  freezes: {},
+  created: new Date().toISOString()
+});
+
+let state = load();
+let player = null;
+let toastTimer = null;
+
+function load() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return seed();
+    const parsed = JSON.parse(raw);
+    return { ...defaultState(), ...parsed };
+  } catch (e) {
+    return seed();
+  }
+}
+
+function seed() {
+  const s = defaultState();
+  const today = startOfDay(new Date());
+  const samples = [
+    { off: 1, ids: ["hm-seat", "hm-stop", "hm-bend"], d: "hm", min: 35 },
+    { off: 2, ids: ["tr-bridge", "tr-stand", "tr-serp"], d: "tr", min: 28 },
+    { off: 3, ids: ["bw-lead", "bw-side", "bw-desen"], d: "bw", min: 22 },
+    { off: 5, ids: ["hm-rein", "hm-back", "wp-jog"], d: "wp", min: 30 }
+  ];
+  samples.forEach((sample, si) => {
+    const day = new Date(today);
+    day.setDate(day.getDate() - sample.off);
+    const key = iso(day);
+    s.days[key] = { min: sample.min, xp: 70 + si * 8, discipline: sample.d };
+    sample.ids.forEach((id) => {
+      const q = 3.5 + (si % 2) * 0.4;
+      s.logs.push({ id, date: key, quality: q, clean: true, note: "" });
+      s.completions[id] = (s.completions[id] || 0) + (q >= 3.2 ? 1 : 0.5);
+    });
+  });
+  return s;
+}
+
+function save() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+
+function iso(d) {
+  const x = new Date(d);
+  const m = String(x.getMonth() + 1).padStart(2, "0");
+  const day = String(x.getDate()).padStart(2, "0");
+  return `${x.getFullYear()}-${m}-${day}`;
+}
+function startOfDay(d) {
+  const x = new Date(d);
+  x.setHours(0, 0, 0, 0);
+  return x;
+}
+function addDays(d, n) {
+  const x = new Date(d);
+  x.setDate(x.getDate() + n);
+  return x;
+}
+function weekKey(d) {
+  const x = startOfDay(d);
+  const day = x.getDay() || 7;
+  x.setDate(x.getDate() - day + 1);
+  return iso(x);
+}
+
+function streakInfo() {
+  const today = startOfDay(new Date());
+  let cursor = new Date(today);
+  if (!state.days[iso(cursor)]) cursor = addDays(cursor, -1);
+  let count = 0;
+  const guard = 400;
+  for (let i = 0; i < guard; i++) {
+    const key = iso(cursor);
+    if (state.days[key] || state.freezes[key]) {
+      if (state.days[key]) count += 1;
+      cursor = addDays(cursor, -1);
+    } else break;
+  }
+  let longest = count;
+  const keys = Object.keys(state.days).sort();
+  if (keys.length) {
+    let run = 0;
+    let prev = null;
+    keys.forEach((k) => {
+      if (!prev) run = 1;
+      else {
+        const diff = (startOfDay(k) - startOfDay(prev)) / 86400000;
+        run = diff === 1 || (diff === 2 && state.freezes[iso(addDays(prev, 1))]) ? run + 1 : 1;
+      }
+      prev = k;
+      longest = Math.max(longest, run);
+    });
+  }
+  return { current: count, longest, todayDone: !!state.days[iso(today)] };
+}
+
+function flameTier(n) {
+  return FLAME_TIERS.find((t) => n >= t.min) || FLAME_TIERS[FLAME_TIERS.length - 1];
+}
+
+function levelFromXp(xp) {
+  return Math.floor(xp / 180) + 1;
+}
+function levelProgress(xp) {
+  return (xp % 180) / 180;
+}
+
+function rankFor(points) {
+  let current = RANKS[0];
+  RANKS.forEach((r) => {
+    if (points >= r.min) current = r;
+  });
+  const idx = RANKS.findIndex((r) => r.id === current.id);
+  const next = RANKS[idx + 1];
+  return { current, next, points: points || 0 };
+}
+
+function exerciseById(id) {
+  return EXERCISES.find((e) => e.id === id);
+}
+function discById(id) {
+  return DISCIPLINES.find((d) => d.id === id);
+}
+
+function missedYesterday() {
+  const y = iso(addDays(startOfDay(new Date()), -1));
+  const before = iso(addDays(startOfDay(new Date()), -2));
+  return !state.days[y] && !state.freezes[y] && !!state.days[before];
+}
+function freezeAvailable() {
+  return !state.freezes[weekKey(new Date()) + "-used"] && !state.freezes[iso(addDays(startOfDay(new Date()), -1))];
+}
+
+function useFreeze() {
+  const y = iso(addDays(startOfDay(new Date()), -1));
+  if (!missedYesterday() || !freezeAvailable()) {
+    toast("Freeze gerade nicht einsetzbar.");
+    return;
+  }
+  state.freezes[y] = true;
+  state.freezes[weekKey(new Date()) + "-used"] = true;
+  save();
+  toast("Freeze gelegt. Die Serie hält.");
+  render();
+}
+
+function hashStr(s) {
+  let h = 0;
+  for (let i = 0; i < s.length; i++) h = (h * 33 + s.charCodeAt(i)) >>> 0;
+  return h;
+}
+function buildSession() {
+  const minutes = state.sessionMin;
+  const pool = EXERCISES.filter((e) => e.d === state.discipline);
+  const seed = iso(new Date()) + state.discipline + minutes + (state.horse.weak || "");
+  const scored = pool.map((e) => {
+    const pts = state.completions[e.id] || 0;
+    let score = 20 - Math.min(pts, 18);
+    if (e.side && state.horse.weak) score += 4;
+    const recent = state.logs.slice(-8).some((l) => l.id === e.id);
+    if (recent) score -= 5;
+    return { e, score: score + (hashStr(seed + e.id) % 10) / 10 };
+  }).sort((a, b) => b.score - a.score);
+  const picked = [];
+  let used = 0;
+  scored.forEach(({ e }) => {
+    if (used + e.min <= minutes + 4 && picked.length < 5) {
+      picked.push(e);
+      used += e.min;
+    }
+  });
+  if (!picked.length) picked.push(scored[0].e);
+  return picked;
+}
+
+function openPlayer() {
+  const items = buildSession().map((e) => ({
+    id: e.id,
+    done: false,
+    note: "",
+    ratings: { sitz: 3, timing: 3, ruhig: 3, hilfe: 3 },
+    seconds: 0
+  }));
+  player = {
+    items,
+    index: 0,
+    started: Date.now(),
+    running: true,
+    acc: 0,
+    tickAt: Date.now()
+  };
+  document.getElementById("player").classList.add("on");
+  renderPlayer();
+}
+
+function closePlayer(confirmAbort) {
+  if (confirmAbort && player && !player.items.every((i) => i.done)) {
+    if (!window.confirm("Session abbrechen? Fortschritt dieser Runde geht verloren.")) return;
+  }
+  player = null;
+  document.getElementById("player").classList.remove("on");
+}
+
+function currentItem() {
+  return player.items[player.index];
+}
+
+function tick() {
+  if (!player || !player.running) return;
+  const now = Date.now();
+  player.acc += now - player.tickAt;
+  player.tickAt = now;
+  const el = document.getElementById("timer");
+  if (el) el.textContent = formatTime(Math.floor(player.acc / 1000));
+}
+setInterval(tick, 250);
+
+function formatTime(s) {
+  const m = Math.floor(s / 60);
+  const r = s % 60;
+  return `${String(m).padStart(2, "0")}:${String(r).padStart(2, "0")}`;
+}
+
+function finishExercise() {
+  const item = currentItem();
+  item.done = true;
+  item.seconds = Math.floor(player.acc / 1000);
+  player.running = false;
+  renderPlayer();
+}
+
+function rateAndNext() {
+  const item = currentItem();
+  ["sitz", "timing", "ruhig", "hilfe"].forEach((k) => {
+    const el = document.getElementById("rate-" + k);
+    if (el) item.ratings[k] = Number(el.value);
+  });
+  const note = document.getElementById("ex-note");
+  if (note) item.note = note.value.trim();
+  if (player.index < player.items.length - 1) {
+    player.index += 1;
+    player.acc = 0;
+    player.tickAt = Date.now();
+    player.running = true;
+    renderPlayer();
+  } else {
+    completeSession();
+  }
+}
+
+function completeSession() {
+  const key = iso(new Date());
+  let xp = 36;
+  player.items.forEach((item) => {
+    const vals = Object.values(item.ratings);
+    const quality = vals.reduce((a, b) => a + b, 0) / vals.length;
+    const clean = quality >= 3.2;
+    state.logs.push({ id: item.id, date: key, quality, clean, note: item.note });
+    state.completions[item.id] = (state.completions[item.id] || 0) + (clean ? 1 : 0.5);
+    xp += 12 + Math.round(quality * 2);
+  });
+  const mins = Math.max(1, Math.round((Date.now() - player.started) / 60000));
+  xp += Math.min(mins, 50);
+  const info = streakInfo();
+  if (!state.days[key]) xp += 10 + Math.min(info.current, 12);
+  state.xp += xp;
+  state.days[key] = {
+    min: (state.days[key]?.min || 0) + mins,
+    xp: (state.days[key]?.xp || 0) + xp,
+    discipline: state.discipline
+  };
+  save();
+  burst();
+  closePlayer(false);
+  toast(`Session steht. +${xp} XP`);
+  show("today");
+  render();
+}
+
+function burst() {
+  const el = document.getElementById("burst");
+  el.classList.add("on");
+  setTimeout(() => el.classList.remove("on"), 1300);
+}
+
+function toast(msg) {
+  const el = document.getElementById("toast");
+  el.textContent = msg;
+  el.classList.add("on");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove("on"), 2400);
+}
+
+function show(id) {
+  document.querySelectorAll(".screen").forEach((s) => s.classList.remove("on"));
+  document.getElementById("screen-" + id).classList.add("on");
+  document.querySelectorAll(".navbtn").forEach((b) => b.classList.toggle("on", b.dataset.screen === id));
+  window.scrollTo(0, 0);
+}
+
+function flameSvg(active) {
+  const c = active ? "#ff6a1a" : "#5c4638";
+  const c2 = active ? "#ffb15a" : "#8a7060";
+  return `<svg viewBox="0 0 64 64" class="flame-wrap" aria-hidden="true">
+    <path fill="${c}" d="M32 6c2 8 0 10-4 16 6-2 10 2 10 8 6-6 8-14 6-22 10 8 14 20 10 30-4 16-16 22-22 22s-18-6-22-22c-2-10 2-18 8-24 2 8 6 10 8 8-2-6-1-12 6-16z"/>
+    <path fill="${c2}" d="M32 28c4 6 2 10-2 14 4 0 8 4 6 10-4 4-10 4-12-2 0-6 4-8 4-12 2-4 2-8 4-10z"/>
+  </svg>`;
+}
+
+function renderToday() {
+  const info = streakInfo();
+  const tier = flameTier(info.current);
+  const disc = discById(state.discipline);
+  const plan = buildSession();
+  const weak = state.horse.weak === "links" ? "linke Seite" : "rechte Seite";
+  const freezeHtml = missedYesterday()
+    ? `<button class="btn" style="margin-top:10px" onclick="useFreeze()">${freezeAvailable() ? "Freeze für gestern einsetzen" : "Freeze diese Woche schon genutzt"}</button>`
+    : "";
+  document.getElementById("screen-today").innerHTML = `
+    <div class="brand">
+      <div class="mark">${flameSvg(true)}</div>
+      <div>
+        <h1>Trailfire</h1>
+        <p>Western-Training für ${escapeHtml(state.horse.name)}</p>
+      </div>
+    </div>
+    <section class="card flame-hero">
+      ${flameSvg(info.current > 0)}
+      <div>
+        <div class="kicker">${tier.name}</div>
+        <h2 style="margin-bottom:4px">${info.current} ${info.current === 1 ? "Tag" : "Tage"}</h2>
+        <div class="dim">${tier.line}</div>
+      </div>
+    </section>
+    <div class="stats">
+      <div class="stat"><b>${info.current}</b><span>Serie</span></div>
+      <div class="stat"><b>${info.longest}</b><span>Rekord</span></div>
+      <div class="stat"><b>${info.todayDone ? "an" : "aus"}</b><span>Heute</span></div>
+    </div>
+    ${freezeHtml}
+    <section class="card" style="margin-top:12px">
+      <div class="kicker">Heute</div>
+      <h3>${state.sessionMin} Minuten ${escapeHtml(disc.name)}</h3>
+      <p class="dim">Schwache Seite: ${weak}. Die Runde bevorzugt Übungen, die dort zählen, und lässt das letzte Training etwas liegen.</p>
+      <div class="seg" style="margin:10px 0">
+        ${[20, 35, 50].map((n) => `<button class="${state.sessionMin === n ? "on" : ""}" onclick="setMin(${n})">${n} min</button>`).join("")}
+      </div>
+      <div class="chips" style="margin-bottom:10px">
+        ${DISCIPLINES.map((d) => `<button class="chip ${state.discipline === d.id ? "on" : ""}" onclick="setDisc('${d.id}')">${d.name}</button>`).join("")}
+      </div>
+      ${plan.map((e, i) => `<div class="dim" style="margin:6px 0">${i + 1}. ${escapeHtml(e.name)} · ${e.reps}</div>`).join("")}
+      <button class="btn primary" style="margin-top:12px" onclick="openPlayer()">${info.todayDone ? "Noch eine Runde" : "Session starten"}</button>
+    </section>
+    ${installCard()}
+  `;
+}
+
+
+function isStandalone() {
+  return window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
+}
+function installCard() {
+  if (isStandalone()) return "";
+  const ios = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+  const steps = ios
+    ? "<li>Diese Seite in Safari öffnen, nicht in Grok.</li><li>Unten auf das Teilen-Symbol tippen.</li><li>Zum Home-Bildschirm tippen.</li><li>Hinzufügen. Danach startet Trailfire als eigenes Icon, ohne Grok.</li>"
+    : "<li>Diese Seite in Chrome öffnen.</li><li>Menü oben rechts öffnen.</li><li>App installieren oder Zum Startbildschirm hinzufügen wählen.</li><li>Danach liegt Trailfire neben den anderen Apps und öffnet im Vollbild.</li>";
+  return `<section class="card install-card">
+    <div class="kicker">Aufs Handy</div>
+    <h3>Wie eine normale App</h3>
+    <p class="dim">Einmal zum Home-Bildschirm legen. Training, Flamme und Pferd bleiben auf dem Gerät. Grok brauchst du dafür nicht mehr.</p>
+    <ol>${steps}</ol>
+  </section>`;
+}
+
+function setMin(n) { state.sessionMin = n; save(); renderToday(); }
+function setDisc(id) { state.discipline = id; save(); renderToday(); }
+
+function renderLibrary() {
+  const q = (document.getElementById("lib-q")?.value || "").toLowerCase();
+  const d = document.getElementById("lib-d")?.value || "all";
+  const w = document.getElementById("lib-w")?.value || "all";
+  const t = document.getElementById("lib-t")?.value || "all";
+  const list = EXERCISES.filter((e) => {
+    if (d !== "all" && e.d !== d) return false;
+    if (w !== "all" && e.where !== w) return false;
+    if (t === "short" && e.min > 7) return false;
+    if (t === "mid" && (e.min < 8 || e.min > 9)) return false;
+    if (t === "long" && e.min < 10) return false;
+    if (q && !`${e.name} ${discById(e.d).name}`.toLowerCase().includes(q)) return false;
+    return true;
+  });
+  document.getElementById("screen-library").innerHTML = `
+    <div class="kicker">Bibliothek</div>
+    <h2>Übungen</h2>
+    <input id="lib-q" placeholder="Suchen, z. B. Gate oder Lope" value="${escapeHtml(q)}" oninput="renderLibrary()" />
+    <div class="filters">
+      <select id="lib-d" onchange="renderLibrary()">
+        <option value="all">Alle Disziplinen</option>
+        ${DISCIPLINES.map((x) => `<option value="${x.id}" ${d === x.id ? "selected" : ""}>${x.name}</option>`).join("")}
+      </select>
+      <select id="lib-w" onchange="renderLibrary()">
+        <option value="all">Boden & Sattel</option>
+        <option value="sattel" ${w === "sattel" ? "selected" : ""}>Sattel</option>
+        <option value="boden" ${w === "boden" ? "selected" : ""}>Boden</option>
+      </select>
+      <select id="lib-t" onchange="renderLibrary()">
+        <option value="all">Jede Dauer</option>
+        <option value="short" ${t === "short" ? "selected" : ""}>kurz</option>
+        <option value="mid" ${t === "mid" ? "selected" : ""}>mittel</option>
+        <option value="long" ${t === "long" ? "selected" : ""}>lang</option>
+      </select>
+    </div>
+    <div class="stack">
+      ${list.map((e) => {
+        const r = rankFor(state.completions[e.id] || 0);
+        return `<button class="ex-card" onclick="openDetail('${e.id}')">
+          <span><b>${escapeHtml(e.name)}</b><span class="dim">${discById(e.d).name} · ${e.min} min · ${e.where}</span></span>
+          <span class="badge ${r.current.id}">${r.current.label}</span>
+        </button>`;
+      }).join("") || `<div class="card">Nichts gefunden. Filter lockern.</div>`}
+    </div>
+  `;
+}
+
+function openDetail(id) {
+  const e = exerciseById(id);
+  const r = rankFor(state.completions[e.id] || 0);
+  const next = r.next ? `${r.next.label} ab ${r.next.min} sauberen Logs` : "Elite gehalten";
+  document.getElementById("sheet").innerHTML = `
+    <div class="kicker">${discById(e.d).name}</div>
+    <h2>${escapeHtml(e.name)}</h2>
+    <span class="badge ${r.current.id}">${r.current.label} · ${r.points.toFixed(1)} Punkte</span>
+    <p class="dim">${next}. ${e.side ? "Zählt auf die schwache Seite." : "Beide Seiten gleich."}</p>
+    <h3>Ziel</h3><p>${escapeHtml(e.goal)}</p>
+    <h3>Setup</h3><p>${escapeHtml(e.setup)}</p>
+    <h3>Ablauf</h3><ol class="steps">${e.steps.map((s) => `<li>${escapeHtml(s)}</li>`).join("")}</ol>
+    <h3>Häufige Fehler</h3><ul class="steps">${e.errors.map((s) => `<li>${escapeHtml(s)}</li>`).join("")}</ul>
+    <h3>Steigerung</h3><p>${escapeHtml(e.up)}</p>
+    <p class="dim">Richtwert ${escapeHtml(e.reps)} · ca. ${e.min} Minuten</p>
+    <button class="btn primary" onclick="startSingle('${e.id}')">Nur diese Übung reiten</button>
+    <button class="btn ghost" onclick="closeSheet()">Schließen</button>
+  `;
+  document.getElementById("overlay").classList.add("on");
+}
+function closeSheet() { document.getElementById("overlay").classList.remove("on"); }
+function startSingle(id) {
+  closeSheet();
+  state.discipline = exerciseById(id).d;
+  player = {
+    items: [{ id, done: false, note: "", ratings: { sitz: 3, timing: 3, ruhig: 3, hilfe: 3 }, seconds: 0 }],
+    index: 0,
+    started: Date.now(),
+    running: true,
+    acc: 0,
+    tickAt: Date.now()
+  };
+  document.getElementById("player").classList.add("on");
+  renderPlayer();
+}
+
+function renderPlayer() {
+  if (!player) return;
+  const item = currentItem();
+  const e = exerciseById(item.id);
+  const pos = `${player.index + 1} / ${player.items.length}`;
+  const weakNote = e.side ? `<span class="side-tag">Schwache Seite heute: ${state.horse.weak}</span>` : "";
+  document.getElementById("player-body").innerHTML = item.done ? `
+    <div class="kicker">Selbstbewertung · ${pos}</div>
+    <h2>${escapeHtml(e.name)}</h2>
+    <p class="dim">Ehrlich loggen. Ab 3,2 im Schnitt zählt der Durchgang voll für den Rang.</p>
+    ${rateRow("sitz", "Sitz", item.ratings.sitz)}
+    ${rateRow("timing", "Timing", item.ratings.timing)}
+    ${rateRow("ruhig", "Pferd ruhig", item.ratings.ruhig)}
+    ${rateRow("hilfe", "Hilfe leicht", item.ratings.hilfe)}
+    <label class="field"><span>Notiz</span><textarea id="ex-note" placeholder="Was war sauber, was beim nächsten Mal?">${escapeHtml(item.note)}</textarea></label>
+    <button class="btn primary" style="margin-top:12px" onclick="rateAndNext()">${player.index === player.items.length - 1 ? "Session abschließen" : "Nächste Übung"}</button>
+  ` : `
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <div class="kicker">${discById(e.d).name} · ${pos}</div>
+      <button class="btn small" onclick="closePlayer(true)">Abbrechen</button>
+    </div>
+    <h2>${escapeHtml(e.name)}</h2>
+    ${weakNote}
+    <div class="timer" id="timer">${formatTime(Math.floor(player.acc / 1000))}</div>
+    <div class="dim">Richtwert ${escapeHtml(e.reps)} · ca. ${e.min} min</div>
+    <div class="row" style="margin:10px 0">
+      <button class="btn" onclick="toggleRun()">${player.running ? "Pause" : "Weiter"}</button>
+      <button class="btn primary" onclick="finishExercise()">Übung fertig</button>
+    </div>
+    <section class="card">
+      <div class="kicker">Ziel</div>
+      <p>${escapeHtml(e.goal)}</p>
+      <div class="kicker">Ablauf</div>
+      <ol class="steps">${e.steps.map((s) => `<li>${escapeHtml(s)}</li>`).join("")}</ol>
+      <div class="kicker">Fehler</div>
+      <ul class="steps">${e.errors.map((s) => `<li>${escapeHtml(s)}</li>`).join("")}</ul>
+    </section>
+  `;
+}
+function rateRow(id, label, val) {
+  return `<label class="field"><span>${label}: <b id="lbl-${id}">${val}</b></span>
+    <input id="rate-${id}" type="range" min="1" max="5" step="1" value="${val}" oninput="document.getElementById('lbl-${id}').textContent=this.value" /></label>`;
+}
+function toggleRun() {
+  if (!player) return;
+  if (player.running) player.running = false;
+  else {
+    player.running = true;
+    player.tickAt = Date.now();
+  }
+  renderPlayer();
+}
+
+function renderProgress() {
+  const info = streakInfo();
+  const tier = flameTier(info.current);
+  const lvl = levelFromXp(state.xp);
+  const days = [...Array(7)].map((_, i) => {
+    const d = addDays(startOfDay(new Date()), i - 6);
+    const key = iso(d);
+    return { key, label: d.toLocaleDateString("de-DE", { weekday: "short" }).slice(0, 2), on: !!state.days[key], freeze: !!state.freezes[key], today: key === iso(new Date()) };
+  });
+  const weeks = [...Array(8)].map((_, i) => {
+    const end = addDays(startOfDay(new Date()), -7 * (7 - i));
+    let min = 0;
+    for (let k = 0; k < 7; k++) {
+      const day = state.days[iso(addDays(end, -k))];
+      if (day) min += day.min;
+    }
+    return min;
+  });
+  const max = Math.max(20, ...weeks);
+  const pts = weeks.map((v, i) => `${(i / 7) * 300},${110 - (v / max) * 96}`).join(" ");
+  const byDisc = DISCIPLINES.map((d) => {
+    const ex = EXERCISES.filter((e) => e.d === d.id);
+    const avg = ex.reduce((a, e) => a + (state.completions[e.id] || 0), 0) / ex.length;
+    const r = rankFor(avg);
+    return { d, avg, r };
+  });
+  document.getElementById("screen-progress").innerHTML = `
+    <div class="kicker">Fortschritt</div>
+    <h2>Level ${lvl}</h2>
+    <div class="barline"><span>${state.xp} XP</span><span>nächstes Level bei ${lvl * 180}</span></div>
+    <div class="track"><i style="width:${Math.round(levelProgress(state.xp) * 100)}%"></i></div>
+    <section class="card" style="margin-top:12px">
+      <div class="kicker">${tier.name}</div>
+      <div class="week" style="margin-top:8px">
+        ${days.map((d) => `<div class="day ${d.on ? "on" : ""} ${d.today ? "today" : ""}">${d.freeze && !d.on ? "❄" : d.on ? "🔥" : "·"}<span>${d.label}</span></div>`).join("")}
+      </div>
+      <p class="dim">Serie ${info.current} · Rekord ${info.longest}. Freeze einmal pro Woche, wenn genau ein Tag fehlt.</p>
+    </section>
+    <section class="card">
+      <div class="kicker">Minuten, 8 Wochen</div>
+      <svg class="chart" viewBox="0 0 300 120">
+        <polyline fill="none" stroke="#ff6a1a" stroke-width="3" points="${pts}" />
+      </svg>
+    </section>
+    <section class="card">
+      <div class="kicker">Disziplin-Ränge</div>
+      <div class="bars">
+        ${byDisc.map((x) => `<div>
+          <div class="barline"><span>${x.d.name}</span><span class="badge ${x.r.current.id}">${x.r.current.label}</span></div>
+          <div class="track"><i style="width:${Math.min(100, (x.avg / 45) * 100)}%"></i></div>
+        </div>`).join("")}
+      </div>
+    </section>
+  `;
+}
+
+function renderHorse() {
+  const h = state.horse;
+  document.getElementById("screen-horse").innerHTML = `
+    <div class="kicker">Pferd</div>
+    <h2>${escapeHtml(h.name || "Dein Pferd")}</h2>
+    <section class="card">
+      <label class="field"><span>Name</span><input id="h-name" value="${escapeHtml(h.name)}" /></label>
+      <label class="field"><span>Alter</span><input id="h-age" type="number" min="2" max="40" value="${h.age}" /></label>
+      <label class="field"><span>Ausbildungsstand</span><input id="h-level" value="${escapeHtml(h.level)}" /></label>
+      <label class="field"><span>Schwache Seite</span>
+        <select id="h-weak">
+          <option value="links" ${h.weak === "links" ? "selected" : ""}>links</option>
+          <option value="rechts" ${h.weak === "rechts" ? "selected" : ""}>rechts</option>
+        </select>
+      </label>
+      <label class="field"><span>Notizen</span><textarea id="h-notes">${escapeHtml(h.notes)}</textarea></label>
+      <button class="btn primary" style="margin-top:12px" onclick="saveHorse()">Profil sichern</button>
+    </section>
+    <section class="card">
+      <div class="kicker">Beispiel</div>
+      <p class="dim">Dusty ist schon da, damit die Bahn nicht leer ist. Name, Alter und Notizen kannst du überschreiben. Alles bleibt in diesem Browser, ohne Konto.</p>
+      <button class="btn" onclick="resetAll()">Daten zurücksetzen</button>
+    </section>
+  `;
+}
+function saveHorse() {
+  state.horse = {
+    name: document.getElementById("h-name").value.trim() || "Dusty",
+    age: Number(document.getElementById("h-age").value) || 9,
+    level: document.getElementById("h-level").value.trim(),
+    weak: document.getElementById("h-weak").value,
+    notes: document.getElementById("h-notes").value.trim()
+  };
+  save();
+  toast("Pferd gespeichert.");
+  render();
+}
+function resetAll() {
+  if (!window.confirm("Alle lokalen Trailfire-Daten löschen und Dusty neu anlegen?")) return;
+  localStorage.removeItem(STORAGE_KEY);
+  state = seed();
+  save();
+  toast("Neu aufgesetzt.");
+  render();
+}
+
+function escapeHtml(s) {
+  return String(s ?? "")
+    .replace(/&/g, "\u0026amp;")
+    .replace(/</g, "\u0026lt;")
+    .replace(/>/g, "\u0026gt;")
+    .replace(/"/g, "\u0026quot;")
+    .replace(/'/g, "\u0026#39;");
+}
+
+function render() {
+  renderToday();
+  if (document.getElementById("screen-library").classList.contains("on")) renderLibrary();
+  if (document.getElementById("screen-progress").classList.contains("on")) renderProgress();
+  if (document.getElementById("screen-horse").classList.contains("on")) renderHorse();
+}
+
+document.querySelectorAll(".navbtn").forEach((b) => {
+  b.addEventListener("click", () => {
+    const id = b.dataset.screen;
+    show(id);
+    if (id === "library") renderLibrary();
+    if (id === "progress") renderProgress();
+    if (id === "horse") renderHorse();
+    if (id === "today") renderToday();
+  });
+});
+
+save();
+renderToday();
+show("today");
+
+if ("serviceWorker" in navigator && location.protocol !== "file:") {
+  navigator.serviceWorker.register("./sw.js").catch(() => {});
+}
+
+</script>
+</body>
+</html>

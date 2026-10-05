@@ -1,0 +1,14 @@
+Trailfire aufs Handy legen
+
+Das ist keine App-Store-Datei. iPhone und Android installieren so eine Trainingsapp als Home-Bildschirm-App. Danach öffnet sie sich Vollbild, ohne Grok, und speichert alles auf dem Gerät.
+
+Wichtig: Die Seite muss einmal über eine richtige Adresse laufen (https), nicht als heruntergeladene Datei aus dem Ordner. Dateien vom Speicher lassen sich auf dem iPhone nicht als App anheften.
+
+So geht es am kürzesten:
+1. Den Ordner trailfire bei einem kostenlosen Hoster ablegen (Netlify Drop, Cloudflare Pages oder GitHub Pages). Es ist nur diese Webseite, kein Konto in der App.
+2. Die Adresse auf dem Handy in Safari (iPhone) oder Chrome (Android) öffnen.
+3. iPhone: Teilen-Symbol, Zum Home-Bildschirm, Hinzufügen.
+4. Android: Chrome-Menü, App installieren oder Zum Startbildschirm hinzufügen.
+5. Icon antippen. Ab dann ist Trailfire offline nutzbar.
+
+Trailfire.html ist die gleiche App in einer Datei, falls du sie am Computer öffnen willst.
